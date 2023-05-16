@@ -1,13 +1,11 @@
 # Animal Classifier HK 
 
-[//]: # Brief overview on what the package does
-
 Camera traps are cameras with a motion sensor that take a picture
 whenever something moves in front of them. They are often
-used as an inexpensive and noninvasive method of observing animals 
+used as an inexpensive and non-invasive method of observing animals 
 in the wild, however they do have one major drawback. As they are
 triggered by any movement, wind and changes in lighting can
-severly clutter databases with images that do not have any animal.
+severely clutter databases with images that do not have any animal.
 
 This package provides an easy-to-use function that identifies the 
 species of the animals that were detected by MegaDetector and sorts 
@@ -15,13 +13,13 @@ them into folders by species.
 It was originally designed to work for a model that
 was trained to categorise animals found in Hong Kong, however it should be easy
 to adapt it for any model trained with Keras 
-(see [the 'modify pipeline' section](#how-to-modify-package-for-new-model) 
+(see [the 'modify pipeline' section](#how-to-modify-the-package-for-new-model) 
 for details).
 
 ## How to run the animal classifier
 
 This package can be installed locally using PIP. To do so, download 
-the github repository and run the following code, where the folder
+the GitHub repository and run the following code, where the folder
 given by "path\to\package" should contain the setup.py file
 
 ```python
@@ -50,7 +48,7 @@ classy_func(
 The program requires the following three files/directories to run.
 
 - **Bounding boxes** - These are the animal detections that were found
-    after running MegaDetector. (See [this section](#megadetector)
+    after running MegaDetector. (See [the section on using MegaDetector](#megadetector)
     to find out how to get this).
 - **Images** - Uncropped images that were fed into
 	MegaDetector. The path passed into the classification function
@@ -65,7 +63,7 @@ The program requires the following three files/directories to run.
 To obtain a copy of the trained model, please contact Dr. **insert name here** of the Global Ecology 
 Lab at the University of Hong Kong at **his/her** email address, **insert email address**. If you
 wish you your own animal classifier and wish to use this pipeline for sorting
-files then please see [the modify pipeline section](#how-to-modify-package-for-new-model)
+files then please see [the modify pipeline section](#how-to-modify-the-package-for-new-model)
 before you use your own model.
 
 #### MegaDetector
@@ -78,7 +76,7 @@ their [GitHub](https://github.com/microsoft/CameraTraps/blob/main/megadetector.m
 page. 
 
 This program was tested on outputs from MegaDetector v5.0A (MDv5a) and thus
-may not work for other version of MegaDetector. Additionally, the
+may not work for other versions of MegaDetector. Additionally, the
 detector requires the installation of Anaconda and the packages, YOLOv5
 and ai4eutils, however details of that can be found on their guide.
 
@@ -132,8 +130,10 @@ it to crash.
 
 #### Animal Categories
 
-The program will classify animals into one of 15 categories
-all of which can be found in Hong Kong. These are:
+The program will classify animals into one of 15 categories of species
+all of which can be found in Hong Kong. They are either
+given by their Latin name or a common name for groups 
+of species and are given by:
 
 - Bird
 - Canis lupus familiaris
@@ -153,51 +153,46 @@ all of which can be found in Hong Kong. These are:
 
 ## Optional Parameters
 
-[//]: # Batch sizes
-[//]: # Warn that if keep_crops = False then if more than one
-[//]: # animal is detected in an image then there will be no
-[//]: # way of knowing which label refers to which animal
-
 The following are optional parameters of the main function
 that affect the efficiency and effectiveness of the classifier.
 
--working_data_dir (String or Python PATH object), default None : Path
+- working_data_dir (String or Python PATH object), default None: Path
 	to directory that will contain the temporary files
 	the program needs to use to run and the output of
 	the program. if set to None, it will default to saving
 	the output to a folder that lies in the working directory
 	
--keep_crops (Bool), default True : If True, MegaDetector's animal detections
+- keep_crops (Bool), default True: If True, MegaDetector's animal detections
 	will be cropped and saved to the working data directory. Furthermore,
 	the crops will be sorted by the species that the neural network
 	detected them to be.
 	
--md_thr (float), default 0.2 : Threshold value for the confidence ratings of
+- md_thr (float), default 0.2: Threshold value for the confidence ratings of
 	Megadetector's detections. Only bounding boxes with a confidence
 	rating above the threshold will be cropped and analysed. A higher
 	threshold means that detections are more likely to be of an animal
 	but it also makes it more likely that fewer animals will be detected
 	
--ent_thr (float), default positive infinity : Threshold value for confidence rating in neural network's
+- ent_thr (float), default positive infinity: Threshold value for confidence rating in neural network's
 	classifications. Confidence rating is Shannon Entropy of the network's
-	output and therefore only classifcations that have an entropy below the 
+	output and therefore only classifications that have an entropy below the 
 	threshold will be assigned to their crops. A lower threshold will increase
 	the precision of the classifier however it also means that more animal
 	detections will be labelled as having an unknown species. If an entropy
 	threshold is used then a cut-off of 1.0 might be a good value to start at
 	although this hasn't been properly tested.
 	
--batch_size (int), default 32 : Number of images to process at a time. Lowering this number
+- batch_size (int), default 32: Number of images to process at a time. Lowering this number
 	should reduce the program's requirement for memory and storage space. Raising
 	this should will likely reduce the overall time it takes for the neural network
 	to process the images
 
--classifier_batch_size (int), default batch_size / 2 : Batch size for images as they're processed by the
+- classifier_batch_size (int), default batch_size / 2: Batch size for images as they're processed by the
 	neural network classifier. By default, its half of the batch size of the cropping
 	algorithm rounded up to the nearest integer. Classifier_batch_size should be at
 	most batch_size
 
--use_checkpoints (Bool), default True: If True, the program will start from checkpoints found
+- use_checkpoints (Bool), default True: If True, the program will start from checkpoints found
 	in working_data_dir, which is useful if program stops during processing. If
 	False, the program will start the whole process from scratch and overwrite
 	checkpoints
@@ -252,13 +247,13 @@ given by:
 - WORK_DIR_DEFAULT_NAME, string - Default name for program's
 	working directory folder when no directory is supplied to
 	the program
-- The following global variableas are all strings and are
+- The following global variables are all strings and are
 	the column titles of the output CSV.
-..- BASE_COL_NAME, default 'original_image_path'
-..- CROP_COL_NAME, default 'cropped_image_path'
-..- SPECIES_COL_NAME, default 'species'
-..- BB_CONF_COL_NAME, default 'bb_conf'
-..- ENT_COL_NAME, default 'class_ent'
+  - BASE_COL_NAME, default 'original_image_path'
+  - CROP_COL_NAME, default 'cropped_image_path'
+  - SPECIES_COL_NAME, default 'species'
+  - BB_CONF_COL_NAME, default 'bb_conf'
+  - ENT_COL_NAME, default 'class_ent'
 
 You can define your own function that pre-processes the images
 before they are passed into the model by overwriting the main
@@ -267,7 +262,7 @@ will pre-process images for the default model and so it is important
 that this function be changed should you use your own model instead.
 
 The pre-processesing function must
-input and output precisely one Tensorflow image tensor or otherwise
+input and output precisely one TensorFlow image tensor or otherwise
 will likely cause an error. An example of a function that performs
 no pre-processing can be seen below.
 
@@ -289,7 +284,7 @@ classy_func(
 In accordance with the [licensing agreement](LICENCE.txt), you must
 give appropriate credit to the **author** for any work derived from 
 this package. When citing this package, please provide the URL of 
-this GitHub page, a link to the [licence](LICENCE.txt) and indicate
+this GitHub page, a link to the licence and indicate
 if any changes to the were made.
 You may do so in any reasonable manner, but not in any way that 
 suggests the licensor endorses you or your use.
