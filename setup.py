@@ -32,7 +32,7 @@ setup(
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Researchers',      
     'Topic :: Software Development :: Build Tools',
-    'License :: OSI Approved :: CC BY 4.0',
+    'License :: CC BY 4.0',
     'Programming Language :: Python :: 3.11.3', 
   ],
 )
