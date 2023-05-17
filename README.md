@@ -4,13 +4,13 @@ Camera traps are cameras with a motion sensor that take a picture
 whenever something moves in front of them. They are often
 used as an inexpensive and non-invasive method of observing animals 
 in the wild. This has allowed researchers to generate large databases
-of animal activity that traditionally take a long
+of animal activity that typically take a long
 time to manually sort through before they can be used
-in any research project.
+in a research project.
 
 This package provides an easy-to-use function that automatically identifies
 the species of an animal in a picture. It has the added feature of cropping the images
-around the animal and sorting them into folders by species but it also requires that the animals be first
+around the animal and sorting them into folders by species but it also requires that the animals first be 
 detected using [MegaDetector](#megadetector) before the program is run.
 The function was originally designed to work for a model that
 was trained to categorise animals found in Hong Kong, however it should be relatively easy
@@ -18,7 +18,7 @@ to adapt it for any model trained with Keras
 (see the section on how to [modify the pipeline](#how-to-modify-the-package-for-a-new-model) 
 for details).
 
-The modules this repository should be seen as the second half of a larger pipeline
+The modules in this repository should be seen as the second part of a larger pipeline
 for sorting animal images. MegaDetector provides the first step of finding the
 animals in the database and this package automates the final step of categorising
 those animals.
