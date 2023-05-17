@@ -4,24 +4,24 @@ Camera traps are cameras with a motion sensor that take a picture
 whenever something moves in front of them. They are often
 used as an inexpensive and non-invasive method of observing animals 
 in the wild. This has allowed researchers to generate large databases
-of animal activity which, although can provide valuable insights, typically take a long
-time to manually sort through the data before it can be used
+of animal activity that traditionally take a long
+time to manually sort through before they can be used
 in any research project.
 
 This package provides an easy-to-use function that automatically identifies
-the species of an animal in a picture. It requires that the animals be first
-detected using [MegaDetector](#megadetector) and also has the added feature of sorting the
-images into folders by species cropped around the animal.
-It was originally designed to work for a model that
+the species of an animal in a picture. It has the added feature of cropping the images
+around the animal and sorting them into folders by species but it also requires that the animals be first
+detected using [MegaDetector](#megadetector) before the program is run.
+The function was originally designed to work for a model that
 was trained to categorise animals found in Hong Kong, however it should be relatively easy
 to adapt it for any model trained with Keras 
-(see the section on [how to modify the pipeline](#how-to-modify-the-package-for-a-new-model) 
+(see the section on how to [modify the pipeline](#how-to-modify-the-package-for-a-new-model) 
 for details).
 
-After using the MegaDetector algorithm, you will likely realise that it is
-very good at removing the vast majority images that have no animal.
-This package was designed to automate the final step of identifing the species
-of the animals before that data can be used in a research project.
+The modules this repository should be seen as the second half of a larger pipeline
+for sorting animal images. MegaDetector provides the first step of finding the
+animals in the database and this package automates the final step of categorising
+those animals.
 
 
 ## How to Run the Animal Classifier
@@ -97,9 +97,9 @@ rating](#optional-parameters) will likely need to be chosen.
 ### Outputs
 
 This program has two outputs. The first is a CSV file called 'Animal Labels'
-and the second is a folder called 'cropped_images'.
+and the second is a folder called 'cropped_images'
 that lists the species of each animal. The data
-dictionary for this file is as follows:
+dictionary for the CSV file is as follows:
 
 - **original_image_path** - File path of the original uncropped image
     relative to the directory that was passed into 'image_dir'.
@@ -115,16 +115,16 @@ As you might expect, the folder called 'cropped_images' contains the cropped
 images of animals. The images are sorted into subfolders based on the
 species of animal that was detected by the algorithm. Additionally, if a threshold value for the
 level of uncertainty in the classifications (known as entropy) was set then it will also 
-contain a subfolder called "zz_unknown" for the animals that it could
+contain a subfolder called 'zz_unknown' for the animals that it could
 not classify.
 
 #### Output folder
 
 The function will create a folder within which  both final outputs will be stored.
 It will also place all intermediary files that are required to process the data in
-this folder however they will all be deleted once the program has been completed
+this folder, however they will all be deleted once all of the data has been processed.
 
-By default, the folder will be created in the working directory and be called
+By default, the folder will be created in the current working directory and be called
 'Animal Detections'. To change where the output is stored, pass
 the path to the directory to the [optional parameter](#optional-parameters) 'working_data_dir'
 of the function.
@@ -137,8 +137,8 @@ it to crash.
 
 If left unmodified, the program will classify animals into one of 15 categories of species
 all of which can be found in Hong Kong. They are either
-given by their Latin name or a common name for groups 
-of species and are given by:
+given by their Latin name or by a common name if they
+are a group of species. The full list of categories can be found below.
 
 - Bird
 - Canis lupus familiaris
@@ -165,7 +165,7 @@ that affect the efficiency and accuracy of the classifier.
 	to directory that will contain the temporary files
 	that the program needs to use to run and the output of
 	the program. if set to None, it will default to creating
-	a folder in the current working directory
+	a folder in the current working directory.
 	
 - **keep_crops** (bool), default True: If True, MegaDetector's animal detections
 	will be cropped and saved to the directory given by working_data_dir. If False,
@@ -181,10 +181,8 @@ that affect the efficiency and accuracy of the classifier.
 	classifications. Confidence rating is Shannon Entropy of the network's
 	output and therefore only classifications that have an entropy below the 
 	threshold will be assigned to their crops. A lower threshold will likely increase
-	the precision of the classifier however it also means that more animal
-	detections will be labelled as having an unknown species. If an entropy
-	threshold is used then a cut-off of 1.0 might be a good value to start at
-	although this hasn't been properly tested.
+	the precision of the classifier however it will also mean that more animal
+	detections will be labelled as having an unknown species.
 	
 - **batch_size** (int), default 32: Number of images to process at a time. Lowering this number
 	should reduce the program's requirement for memory and storage space. Raising
@@ -211,12 +209,12 @@ from MegaDetector. The package has been designed so that it can
 be tailored to work for any model that is similar to the original
 one by running several commands before the function is run. However,
 it does require that the new model is a Keras neural network where each
-output node represents exact one category and where the node with the
+output node represents exactly one category and where the node with the
 highest value is the category for a given image.
 
 There are several global variables that will likely need to be
 changed to fit a new model. These variables can be accessed
-using the 'config' module, an example of which can be seen below.
+using the 'config' module; an example of which can be seen below.
 
 ```python
 from classify_animals.main import main as classy_func
@@ -262,17 +260,17 @@ You can define your own function that pre-processes the images
 before they are passed into the model by overwriting the main
 function of the 'preprocess_image' module. By default, the function
 will pre-process images for the default model and so it is important
-that this function be changed should you use your own model instead.
+that this function be changed should you use your own.
 
 The pre-processesing function must
 input and output precisely one TensorFlow image tensor or else it
 will likely cause an error. An example of overwriting the pre-processing function 
-with one that performs leaves the tensors unchanged can be seen below.
+with one that leaves the tensors unchanged can be seen below.
 
 ```python
 from classify_animals.scripts import preprocess_image
 
-preprocess_image.main = lambda x : x
+preprocess_image.main = lambda x : x # Leave images unchanged
 
 classy_func(
     bb_results_path = 'path\to\MegaDetector\output\json\string', 
@@ -287,38 +285,38 @@ In accordance with the [licensing agreement](LICENCE.txt), you must
 give appropriate credit to the author, Gareth Lamb, for any work derived from 
 this package. When citing this package, please provide the URL of 
 this GitHub page, a link to the licence and indicate
-if any changes to it were made.
+if any changes to the source code were made.
 You may do this in any reasonable manner, but not in any way that 
 suggests the licensor endorses you or your use.
 
 ## Acknowledgements 
 
 We would like to thank the many research teams in Hong Kong who
-collected the camera trap data that we used to train the model
-and who inspired us to create this package. We would also like
+collected the camera trap data that we used to train our model. 
+We would also like
 to thank the team behind MegaDetector who built the reliable
-open-source animal detector. Details of the paper that inpired
-us to build this package can be found below.
+open-source animal detector and whose paper inspired us to
+build this package. Details of their paper can be found below.
 
 Megadetector
-**Title** - Efficient Pipeline for Camera Trap Image Review
-**Author** - Beery, Sara and Morris, Dan and Yang, Siyu
-**Journal** - arXiv preprint arXiv:1907.06772
-**Year** - 2019
+- **Title** - Efficient Pipeline for Camera Trap Image Review
+- **Author** - Beery, Sara and Morris, Dan and Yang, Siyu
+- **Journal** - arXiv preprint arXiv:1907.06772
+- **Year** - 2019
 
 We would also like to thank the creators of Keras and TensorFlow
 for building the packages that we used to train our model and
 construct the pipeline. The following are the citations to their
-papers
+packages.
 
 Keras
-**Title** - Keras
-**Author** - Chollet, Francois and others
-**Year** - 2015
-**URL** - https://keras.io
+- **Title** - Keras
+- **Author** - Chollet, Francois and others
+- **Year** - 2015
+- **URL** - https://keras.io
 
 Tensorflow
-**Title** - TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems
-**Author** - Martín Abadi et al.
-**URL** - https://www.tensorflow.org/
-**Note** - Software available from tensorflow.org
+- **Title** - TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems
+- **Author** - Martín Abadi et al.
+- **URL** - https://www.tensorflow.org/
+- **Note** - Software available from tensorflow.org
