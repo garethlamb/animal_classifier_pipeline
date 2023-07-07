@@ -1,8 +1,13 @@
 from distutils.core import setup
 setup(
   name = 'classify_animals',
-  packages = ['classify_animals', 'classify_animals.scripts'],  
-  version = '1.0',  
+  packages = [
+    'classify_animals', 
+    'classify_animals.scripts',
+    'classify_animals.keras_scripts',
+    'classify_animals.pytorch_scripts',
+  ],  
+  version = '2.0',  
   license ='CC BY 4.0', 
   description = """Provides a function that classifies images 
       of Hong Kong animals that have been 
@@ -24,8 +29,11 @@ setup(
     'numpy',
     'Pillow',
     'scikit-learn',
+    'skl2onnx',
+    'onnxruntime-gpu',
     'keras',
     'tensorflow',
+    'torchvision',
     'tqdm'
   ],
   classifiers=[

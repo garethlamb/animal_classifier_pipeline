@@ -64,11 +64,10 @@ The function requires the following three files/directories to run.
 	should be the same as what was passed into MegaDetector's detection
 	function when the bounding boxes were generated.
 - **Model** - Model that was trained to classify cropped images of animals.
-    It should be saved using either Keras's H5 format or some other format
-	that can be read by Keras's 
-	[models.load_model](https://www.tensorflow.org/guide/keras/save_and_serialize#how_to_save_and_load_a_model) 
-	function. Furthermore,
-	the path to this file should be passed to model_path.
+	It should either be a single file saved in Keras's H5 format or a folder
+	containing the saved models and dataset means and standard deviations from the
+	[train_image_classifier_al](https://github.com/garethlamb/train_image_classifier_al) package. 
+	Additionally, the path to the model file or folder should be passed to model_path.
 
 #### Model
 

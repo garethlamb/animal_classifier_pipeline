@@ -7,7 +7,7 @@ from os import path
 
 def save_crop(img: Image.Image, bb_left_norm, bb_top_norm,
               bb_width_norm, bb_height_norm,
-              save: str) -> bool:
+              save: str, square_crop: bool = True) -> bool:
     """
     Crops an image and saves the crop to file. Copied from megadetector's
     example classification project.
@@ -27,7 +27,18 @@ def save_crop(img: Image.Image, bb_left_norm, bb_top_norm,
     box_w = int(bb_width_norm * img_w)
     box_h = int(bb_height_norm * img_h)
     
-
+    if square_crop:
+        # expand box width or height to be square, but limit to img size
+        box_size = max(box_w, box_h)
+        xmin = max(0, min(
+            xmin - int((box_size - box_w) / 2),
+            img_w - box_w))
+        ymin = max(0, min(
+            ymin - int((box_size - box_h) / 2),
+            img_h - box_h))
+        box_w = min(img_w, box_size)
+        box_h = min(img_h, box_size)
+    
     if box_w == 0 or box_h == 0:
         logging.info(f'Skipping size-0 crop (w={box_w}, h={box_h}) that would have been saved at {save}')
         
@@ -35,7 +46,10 @@ def save_crop(img: Image.Image, bb_left_norm, bb_top_norm,
         
         crop = img.crop(box=[xmin, ymin, xmin + box_w, ymin + box_h])
         
-
+        if square_crop and (box_w != box_h):
+            # pad to square using 0s
+            crop = ImageOps.pad(crop, size=(box_size, box_size), color=0)
+        
         os.makedirs(os.path.dirname(save), exist_ok=True)
         crop.save(save)
 
@@ -84,7 +98,7 @@ def crop_image(sr_bb, source_dir, target_dir, subfolder_name = None):
                 
             # Get absolute path of cropped image
             absolute_target_path = path.join(target_dir, relative_target_path)
-                
+            
             # Crop image and save crop to target path
             save_crop(
                 img = img,
@@ -94,9 +108,7 @@ def crop_image(sr_bb, source_dir, target_dir, subfolder_name = None):
                 bb_height_norm = sr_bb['bb_height_norm'],
                 save = absolute_target_path
             )
-            
-                
-                
+        
     except:  # If image can't be loaded or cropped
         
         logging.warning(f'Unable to load/crop image at {absolute_source_path}')

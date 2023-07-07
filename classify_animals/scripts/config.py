@@ -47,6 +47,11 @@ SPECIES_COL_NAME = 'species'
 BB_CONF_COL_NAME = 'bb_conf'
 ENT_COL_NAME = 'class_ent'
 
+# File names of PyTorch model
+CLASSIFIER_NAME = 'classifier.onnx'
+EMBEDDING_MODEL_NAME = 'embedding_model_weights.pt'
+EMBEDDING_MEAN_NAME = 'dataset_mean.npy'
+EMBEDDING_STD_NAME = 'dataset_std.npy'
 
 def build_working_file_dict(working_dir):
     """
