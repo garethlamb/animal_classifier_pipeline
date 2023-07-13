@@ -42,9 +42,9 @@ Although, you will need to [download the trained model](#model) and have [ran Me
 as described in the [Inputs](#inputs) section.
 
 ```python
-from classify_animals.main import main as classy_func
+from classify_animals.main import classify_animals
 
-classy_func(
+classify_animals(
     bb_results_path = 'path\to\MegaDetector\output\json\string', 
     image_dir = 'path\to\raw\images',
     model_path = 'path\to\trained\model'
